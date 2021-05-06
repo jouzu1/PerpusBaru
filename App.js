@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, TouchableOpacity, View,StyleSheet,SafeAreaView, FlatList, Image} from 'react-native'
+import { Text, TextInput, TouchableOpacity, View,StyleSheet,SafeAreaView, FlatList, Image, Alert} from 'react-native'
 import TextText from './TextText'
 import axios from 'axios';
 import AddBuku from './AddBuku';
@@ -10,20 +10,24 @@ export class App extends Component {
     super(props);
     this.state = {
       counter:0,
-      dataqu : []
+      dataqu : [],
+      namaBuku:""
     }
   } 
 
   componentDidMount(){
     this.getData();
+    // this.deleteData();
   }
 
   componentDidUpdate(){
     this.getData();
+    // this.deleteData();
   }
 
   getData = () => {
-    axios.get('http://8f64f6a3d447.ngrok.io/buku/get')
+    // axios.get(' http://5189d5f9efe2.ngrok.io/buku/get')
+    axios.get(`http://5189d5f9efe2.ngrok.io/buku/get/${this.state.namaBuku}`)
     .then((res) => {
       console.log(res)
       // console.log(res.data.userId)
@@ -31,6 +35,24 @@ export class App extends Component {
       // console.log(res.data.title)
       // console.log(res.data.completed)
       this.setState({dataqu : res.data})
+    }).then(()=>{
+      // console.log(JSON.stringify(this.state.data[0].title))
+    }).catch((error)=>{
+      alert(error.message);
+    })
+  }
+
+  deleteData = (id) => {
+    // axios.get(' http://5189d5f9efe2.ngrok.io/buku/get')
+    axios.delete(`http://5189d5f9efe2.ngrok.io/buku/delete/${id}`)
+    .then((res) => {
+      // console.log(res)
+      alert(res.data)
+      // console.log(res.data.userId)
+      // console.log(res.data.id)
+      // console.log(res.data.title)
+      // console.log(res.data.completed)
+      // this.setState({dataqu : res.data})
     }).then(()=>{
       // console.log(JSON.stringify(this.state.data[0].title))
     }).catch((error)=>{
@@ -52,6 +74,15 @@ export class App extends Component {
     <Text >Judul Buku     : {item.namaBuku}</Text>
     <Text >Nama Penulis   :{item.namaPenulis}</Text>
     <Text >Jumlah Halaman :{item.jumlahHalaman}</Text>
+    <TouchableOpacity onPress={()=>{this.props.navigation.replace('UpdateBuku',item)}} style={styles.bluebutton}><Text>Update Buku</Text></TouchableOpacity>
+    <TouchableOpacity onPress={()=>{ Alert.alert(
+                     "Delete",
+                     "Hapus Data",
+                     [
+                         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                         {text: 'OK', onPress: () => this.deleteData(item.id) }
+                     ]
+                 )}} style={styles.bluebutton}><Text>Delete Buku</Text></TouchableOpacity>
     {/* <Image style={{width: 100, height: 100, marginLeft: 20, marginTop:10}}
     source={{uri:item.Poster}}></Image> */}
   </SafeAreaView>
@@ -62,6 +93,7 @@ export class App extends Component {
     return (
       <SafeAreaView>
         <TouchableOpacity onPress={()=>{this.props.navigation.replace('AddBuku')}} style={styles.button}><Text>Tambahkan Buku</Text></TouchableOpacity>
+        <TextInput placeholder="Pencarian Berdasarkan Judul Buku" onChangeText={(data) => { this.setState({ namaBuku: data }) }} />
         {/* <AddBuku /> */}
         <FlatList
         data = {this.state.dataqu}
@@ -83,6 +115,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "red",
     padding: 10
+  },
+  bluebutton: {
+    alignItems: "center",
+    backgroundColor: "blue",
+    padding: 10,
+    color:'white'
   },
 })
 

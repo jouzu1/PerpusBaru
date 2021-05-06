@@ -5,15 +5,18 @@ export class AddBuku extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            namaBuku: "",
-            jumlahHalaman: 0,
-            namaPenulis: ""
+            id:this.props.route.params.id,
+            namaBuku: this.props.route.params.namaBuku,
+            jumlahHalaman: this.props.route.params.jumlahHalaman,
+            namaPenulis: this.props.route.params.namaPenulis
             }
     }
-
-    handleAdd() {
+    componentDidMount() {
+        console.log(this.props)
+    }
+    handleUpdate() {
         console.log(this.state)
-        axios.post(' http://5189d5f9efe2.ngrok.io/buku/add', this.state)
+        axios.put(`http://5189d5f9efe2.ngrok.io/buku/update/${this.state.id}`, this.state)
             .then((res) => {
                 console.log(res)
                 // alert("Data Berhasil Dimasukkan")
@@ -35,13 +38,13 @@ export class AddBuku extends Component {
     render() {  
         return (
             <View style={{ borderWidth: 5 }}>
-                <Text> Input Judul Buku </Text>
-                <TextInput placeholder="Judul Buku" onChangeText={(data) => { this.setState({ namaBuku: data }) }} />
-                <Text> Input Halaman Buku </Text>
-                <TextInput placeholder="Halaman Buku" keyboardType='numeric' onChangeText={(data) => { this.setState({ jumlahHalaman: parseInt(data) }) }} />
-                <Text> Input Nama Penulis </Text>
-                <TextInput placeholder="Nama Penulis" onChangeText={(data) => { this.setState({ namaPenulis: data }) }} />
-                <TouchableOpacity style={styles.button} onPress={this.handleAdd.bind(this)}><Text>Tambahkan Buku</Text></TouchableOpacity>
+                <Text> Update Judul Buku </Text>
+                <TextInput value={this.state.namaBuku} onChangeText={(data) => { this.setState({ namaBuku: data }) }} />
+                <Text> Update Halaman Buku </Text>
+                <TextInput value={()=>{if(String(this.state.jumlahHalaman)==""){return 0}else{return String(this.state.jumlahHalaman)}}} keyboardType='numeric' onChangeText={(data) => { this.setState({ jumlahHalaman: parseInt(data) }) }} />
+                <Text> Update Nama Penulis </Text>
+                <TextInput value={this.state.namaPenulis} onChangeText={(data) => { this.setState({ namaPenulis: data }) }} />
+                <TouchableOpacity style={styles.button} onPress={this.handleUpdate.bind(this)}><Text>Update Buku</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={()=>{this.props.navigation.replace('App')}}><Text>Cancel</Text></TouchableOpacity>
             </View>
         )

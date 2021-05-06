@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import App from './App';
 import AddBuku from './AddBuku';
+import UpdateBuku from './UpdateBuku';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,9 @@ export class Home extends Component {
                         <Stack.Screen
                         name="AddBuku"
                         component={AddBuku} />
+                        <Stack.Screen
+                        name="UpdateBuku"
+                        component={UpdateBuku} />
                     {/* <Stack.Screen
                         name="Register"
                         component={Register} />
