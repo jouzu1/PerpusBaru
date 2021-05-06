@@ -5,5 +5,6 @@
 import {AppRegistry} from 'react-native';
 import AddBuku from './AddBuku';
 import {name as appName} from './app.json';
+import Home from './Home';
 
-AppRegistry.registerComponent(appName, () => AddBuku);
+AppRegistry.registerComponent(appName, () => Home);

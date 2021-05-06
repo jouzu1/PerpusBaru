@@ -18,10 +18,14 @@ export class App extends Component {
     this.getData();
   }
 
+  componentDidUpdate(){
+    this.getData();
+  }
+
   getData = () => {
-    axios.get('http://5cb0835a9e15.ngrok.io/buku/get')
+    axios.get('http://8f64f6a3d447.ngrok.io/buku/get')
     .then((res) => {
-      console.log(res.data)
+      console.log(res)
       // console.log(res.data.userId)
       // console.log(res.data.id)
       // console.log(res.data.title)
@@ -57,7 +61,7 @@ export class App extends Component {
     
     return (
       <SafeAreaView>
-        <TouchableOpacity style={styles.button}><Text>Tambahkan Buku</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>{this.props.navigation.replace('AddBuku')}} style={styles.button}><Text>Tambahkan Buku</Text></TouchableOpacity>
         {/* <AddBuku /> */}
         <FlatList
         data = {this.state.dataqu}
